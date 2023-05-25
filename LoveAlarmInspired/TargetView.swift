@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct TargetView: View {
+    @ObservedObject  var userViewModel: UserViewModel
+
     @State private var searchText = ""
     private var data: [String] = ["1", "2", "3", "1", "2", "3", "1", "2", "3", "1", "2", "3", "1", "2", "3", "1", "2", "3", "1", "2", "3", ]
+
     
     var datas: [String] {
         let a = data.map{$0.lowercased()}
@@ -17,19 +20,31 @@ struct TargetView: View {
             $0.contains(searchText.lowercased())
         }
     }
+    init(userViewModel: UserViewModel) {
+        self.userViewModel = userViewModel
+    }
+    
+    @State var listTarget: [UserModel] = []
         
     
     var body: some View {
         NavigationView{
             VStack{
                 VStack(alignment: .center){
-                    Text("Muhammad Rezky Sulihin")
-                        .foregroundColor(.white).foregroundColor(.white)
-                        .font(Font.system(size: 16, design: .rounded))
-                    Spacer().frame(height: 4)
-                    Text(verbatim:"mrezkysulihin@gmail.com")
-                        .foregroundColor(.white.opacity(0.8))
-                        .font(Font.system(size: 12, design: .rounded))
+                    if(userViewModel.userTarget != nil  ){
+                        var _ = print("ekek", userViewModel.userTarget)
+                        Text("\(userViewModel.userTarget?.firstName ?? "") \(userViewModel.userTarget?.lastName ?? "")")
+                            .foregroundColor(.white).foregroundColor(.white)
+                            .font(Font.system(size: 16, design: .rounded).weight(.semibold))
+                        Spacer().frame(height: 4)
+                        Text(verbatim: userViewModel.userTarget?.email ?? "")
+                            .foregroundColor(.white.opacity(0.8))
+                            .font(Font.system(size: 12, design: .rounded))
+                    } else {
+                        Text(verbatim:"Select your target in the list below")
+                            .foregroundColor(.white.opacity(0.8))
+                            .font(Font.system(size: 12, design: .rounded))
+                    }
                 }
                 .padding(16)
                 .frame(maxWidth: UIScreen.main.bounds.width)
@@ -40,11 +55,53 @@ struct TargetView: View {
                 .padding(24)
                 List{
                     
-                    ForEach(datas, id: \.self){ da in
-                        HStack{
-                            Text(da)
-                            Spacer()
+                    if(userViewModel.viewState == ViewState.loaded){
+                        ForEach(0..<listTarget.count, id: \.self){ index in
+                            VStack{
+                                Text("\(listTarget[index].firstName ?? "") \(listTarget[index].lastName ?? "")")
+                                    .font(Font.system(size: 16, design: .rounded).weight(.semibold))
+                                Spacer().frame(height: 4)
+                                Text("\(listTarget[index].email ?? "")")
+                                
+                                    .font(Font.system(size: 12, design: .rounded).weight(.regular))
+                            }
+                            .padding(16)
+                            .frame(maxWidth: .infinity)
+                            .background(.white)
+                            .cornerRadius(16)
+                            .onTapGesture {
+                                Task{
+                                    
+                                    userViewModel.viewState = ViewState.loading
+                                    let email = listTarget[index].email!
+                                    await userViewModel.updateUserLovedBy(email) // update target loved by
+                                    await userViewModel.updateUserTarget(email) // update this user target
+                                    
+                                    let newUserModel = await userViewModel.getUserFromCloudKit()
+                                    if (newUserModel != nil){
+                                        userViewModel.userModel = newUserModel
+                                    }
+                                    let newUserTarget = await userViewModel.getUserByEmail(userViewModel.userModel?.target ?? "")
+                                    print("executed")
+                                    if(newUserTarget != nil){
+                                        print("executed")
+                                        userViewModel.userTarget = newUserTarget
+                                    }
+                                    
+                                    userViewModel.viewState = ViewState.loaded
+                                    
+                                }
+                            }
                         }
+                    } else {
+                        Text("Loading")
+                    }
+                }.onAppear{
+                    Task{
+                        userViewModel.viewState = ViewState.loading
+                        listTarget = await userViewModel.getAllUser()
+                        print(listTarget)
+                        userViewModel.viewState = ViewState.loaded
                     }
                 }
             }
@@ -56,8 +113,8 @@ struct TargetView: View {
     }
 }
 
-struct TargetView_Previews: PreviewProvider {
-    static var previews: some View {
-        TargetView()
-    }
-}
+//struct TargetView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TargetView()
+//    }
+//}

@@ -22,6 +22,19 @@ struct ContentView: View {
             }
         }
     }
+//
+//    private func autoRefresh() {
+//        Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { timer in
+//            Task{
+//              await  userViewModel.refresh()
+//            }
+//        }
+//    }
+//
+    
+    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
+   
+    
     
     var body: some View {
         
@@ -43,14 +56,22 @@ struct ContentView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(width: geometry.size.width * 0.65)
                         VStack{
-                            Text("12")
+                            Text("\((userViewModel.userModel?.lovedBy.count ?? 1)-1)")
                                 .font(Font.system(size: 64, design: .rounded).weight(.bold))
                                 .foregroundColor(Color("pink1"))
                             Text("Person Love You")
                                 .font(Font.system(size: 12, design: .rounded).weight(.semibold))
                                 .foregroundColor(Color("pink1"))
                                 .multilineTextAlignment(.center)
+                            Text("tap to refresh")
+                                .font(Font.system(size: 10, design: .rounded).weight(.semibold))
+                                .foregroundColor(.black.opacity(0.2))
+                                .multilineTextAlignment(.center)
                             Spacer().frame(height: 16)
+                        }
+                    }.onTapGesture {
+                        Task{
+                            await userViewModel.refresh()
                         }
                     }
                     Spacer()
@@ -58,7 +79,11 @@ struct ContentView: View {
                     HStack(){
                         // is discoverable
                         Button{
-                            isDiscoverable.toggle()
+                            if(userViewModel.userModel != nil){
+                                isDiscoverable.toggle()
+                            } else {
+                                routeToProfile.toggle()
+                            }
                         } label: {
                             VStack(spacing: 8){
                                 ZStack{
@@ -81,7 +106,11 @@ struct ContentView: View {
                         Spacer()
                         // is notifiable
                         Button{
-                            isNotifiable.toggle()
+                            if(userViewModel.userModel != nil){
+                                isNotifiable.toggle()
+                            } else {
+                                routeToProfile.toggle()
+                            }
                         } label: {
                             VStack(spacing: 8){
                                 ZStack{
@@ -103,11 +132,16 @@ struct ContentView: View {
                         }
                         Spacer()
                         // target button
-                        NavigationLink( destination: TargetView(), isActive: $routeToTarget){
+                        NavigationLink( destination: TargetView(userViewModel: userViewModel), isActive: $routeToTarget){
                             EmptyView()
                         }
                         Button{
-                            routeToTarget.toggle()
+                            
+                            if(userViewModel.userModel != nil){
+                                routeToTarget.toggle()
+                            } else {
+                                routeToProfile.toggle()
+                            }
                             print(routeToProfile)
                         } label: {
                             VStack(spacing: 8){
@@ -130,7 +164,7 @@ struct ContentView: View {
                         }
                         Spacer()
                         // profile button
-                        NavigationLink( destination: ProfileView(), isActive: $routeToProfile){
+                        NavigationLink( destination: ProfileView(userViewModel: userViewModel), isActive: $routeToProfile){
                             EmptyView()
                         }
                         Button{
@@ -167,6 +201,15 @@ struct ContentView: View {
             )
             .onAppear {
                 startAnimation()
+//                autoRefresh()
+            }
+        }.onAppear{
+            
+            Task{
+                userViewModel.userTarget = await userViewModel.getUserByEmail(userViewModel.userModel?.target ?? "")
+                print("email", userViewModel.userModel?.target)
+                print(userViewModel.userTarget, "oooo")
+
             }
         }
         
