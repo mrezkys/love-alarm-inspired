@@ -15,6 +15,9 @@
 		A69F94862A1E988400BEBD48 /* TargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69F94852A1E988400BEBD48 /* TargetView.swift */; };
 		A69F948B2A1EA0BF00BEBD48 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69F948A2A1EA0BF00BEBD48 /* UserModel.swift */; };
 		A69F948D2A1EA10500BEBD48 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69F948C2A1EA10500BEBD48 /* UserViewModel.swift */; };
+		A69F94902A1F795C00BEBD48 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69F948F2A1F795C00BEBD48 /* BluetoothManager.swift */; };
+		A69F94932A1F7A6E00BEBD48 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69F94922A1F7A6E00BEBD48 /* NotificationManager.swift */; };
+		A69F94972A1F7AE500BEBD48 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A69F94962A1F7AE500BEBD48 /* ring.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +31,9 @@
 		A69F948A2A1EA0BF00BEBD48 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		A69F948C2A1EA10500BEBD48 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		A69F948E2A1EA5A800BEBD48 /* LoveAlarmInspired.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LoveAlarmInspired.entitlements; sourceTree = "<group>"; };
+		A69F948F2A1F795C00BEBD48 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
+		A69F94922A1F7A6E00BEBD48 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		A69F94962A1F7AE500BEBD48 /* ring.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ring.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +66,8 @@
 		A649E6622A1D1D5000BF5D85 /* LoveAlarmInspired */ = {
 			isa = PBXGroup;
 			children = (
+				A69F94952A1F7AD200BEBD48 /* Sounds */,
+				A69F94912A1F7A5B00BEBD48 /* Manager */,
 				A69F948E2A1EA5A800BEBD48 /* LoveAlarmInspired.entitlements */,
 				A69F94892A1EA0A900BEBD48 /* ViewModels */,
 				A69F94882A1EA0A100BEBD48 /* Models */,
@@ -95,6 +103,23 @@
 				A69F948C2A1EA10500BEBD48 /* UserViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A69F94912A1F7A5B00BEBD48 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				A69F948F2A1F795C00BEBD48 /* BluetoothManager.swift */,
+				A69F94922A1F7A6E00BEBD48 /* NotificationManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		A69F94952A1F7AD200BEBD48 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				A69F94962A1F7AE500BEBD48 /* ring.mp3 */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -157,6 +182,7 @@
 			files = (
 				A649E66B2A1D1D5000BF5D85 /* Preview Assets.xcassets in Resources */,
 				A649E6682A1D1D5000BF5D85 /* Assets.xcassets in Resources */,
+				A69F94972A1F7AE500BEBD48 /* ring.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,8 +196,10 @@
 				A649E6662A1D1D5000BF5D85 /* ContentView.swift in Sources */,
 				A69F948D2A1EA10500BEBD48 /* UserViewModel.swift in Sources */,
 				A69F94862A1E988400BEBD48 /* TargetView.swift in Sources */,
+				A69F94902A1F795C00BEBD48 /* BluetoothManager.swift in Sources */,
 				A649E6722A1D323C00BF5D85 /* ProfileView.swift in Sources */,
 				A69F948B2A1EA0BF00BEBD48 /* UserModel.swift in Sources */,
+				A69F94932A1F7A6E00BEBD48 /* NotificationManager.swift in Sources */,
 				A649E6642A1D1D5000BF5D85 /* LoveAlarmInspiredApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -305,6 +333,7 @@
 				DEVELOPMENT_TEAM = 5LSQ3C9W8U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "advertising data";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -336,6 +365,7 @@
 				DEVELOPMENT_TEAM = 5LSQ3C9W8U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "advertising data";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

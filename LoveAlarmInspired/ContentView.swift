@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var bluetoothManager = BluetoothManager()
+    @ObservedObject var notificationManager = NotificationManager()
+    
     @State private var isDiscoverable = false
     @State private var isNotifiable = false
     @State private var isScalingUp = false
@@ -33,7 +36,8 @@ struct ContentView: View {
 //
     
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
-   
+//    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
     
     
     var body: some View {
@@ -81,6 +85,11 @@ struct ContentView: View {
                         Button{
                             if(userViewModel.userModel != nil){
                                 isDiscoverable.toggle()
+                                if(isDiscoverable){
+                                    bluetoothManager.startAdvertising(id: userViewModel.userModel!.email!)
+                                } else {
+                                    bluetoothManager.stopAdvertising()
+                                }
                             } else {
                                 routeToProfile.toggle()
                             }
@@ -108,6 +117,11 @@ struct ContentView: View {
                         Button{
                             if(userViewModel.userModel != nil){
                                 isNotifiable.toggle()
+                                if(isNotifiable){
+                                    bluetoothManager.startScanDevices(target: userViewModel.userModel!.target, play: notificationManager.playRingSound)
+                                } else {
+                                    bluetoothManager.stopAdvertising()
+                                }
                             } else {
                                 routeToProfile.toggle()
                             }
@@ -203,6 +217,7 @@ struct ContentView: View {
                 startAnimation()
 //                autoRefresh()
             }
+
         }.onAppear{
             
             Task{
@@ -212,6 +227,8 @@ struct ContentView: View {
 
             }
         }
+        
+        
         
         
         
