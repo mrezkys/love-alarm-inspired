@@ -118,7 +118,7 @@ struct ContentView: View {
                             if(userViewModel.userModel != nil){
                                 isNotifiable.toggle()
                                 if(isNotifiable){
-                                    bluetoothManager.startScanDevices(target: userViewModel.userModel!.target, play: notificationManager.playRingSound)
+                                    bluetoothManager.startScanDevices(targets: userViewModel.userModel!.lovedBy, play: notificationManager.playRingSound)
                                 } else {
                                     bluetoothManager.stopAdvertising()
                                 }
