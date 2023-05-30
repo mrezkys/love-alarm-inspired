@@ -10,7 +10,8 @@ Unfortunately, this application will only run if the user opens it. This is beca
 I chose BLE over GPS because I believe BLE would be more energy-efficient than GPS. However, after the development, I realized that BLE has this limitation. After this, I will try to explore BLE again, and if it doesn't work, I might consider using GPS.
 
 <img src="https://github.com/mrezkys/love-alarm-inspired/blob/main/love-alarm-inspired-banner.jpg" width="auto" height="auto" >
-### Framework
+
+### Demo
 Demo : [Youtube Video](https://youtube.com/shorts/rV7oue5fnUo)
 
 ### Framework
